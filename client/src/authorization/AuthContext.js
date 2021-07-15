@@ -28,10 +28,6 @@ function AuthContextProvider(props) {
              return console.log(res.data)
             })
          .catch(err => console.log(err))
-    //      setTimeout(() => {
-    //          history.push({pathname:"/AuthPage",  issue})
-    //      }, 2000)
-    // }
     
 }
 

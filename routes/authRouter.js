@@ -18,6 +18,7 @@ authRouter.post("/signup", (req, res, next) => {
         }
         const newUser = new User(req.body)
         console.log("NEW USER?", newUser)
+        //presave hook will execute first before firing newUser.save below (confirm this)
         newUser.save((err, savedUser) => {
             if(err) {
                 res.status(500)
@@ -25,12 +26,8 @@ authRouter.post("/signup", (req, res, next) => {
             }
             //payload and secret .sign method provides 
             //toObject is mongoose method that converts to object
-            console.log(savedUser)
-            const token = jwt.sign(savedUser.toObject(), process.env.SECRET)
-                console.log("TOKEN USER?", token)
-            console.log("SAVED USER?", savedUser)
-            
-            return res.status(201).send({token, user: savedUser })
+            const token = jwt.sign(savedUser.withoutPassword(),process.env.SECRET)
+            return res.status(200).send({token, user: savedUser.withoutPassword() })
         })
             
     })
@@ -40,6 +37,7 @@ authRouter.post("/signup", (req, res, next) => {
 //login
 
 authRouter.post("/login", (req, res, next) =>{
+    User.find((err, thing) => console.log(thing))
     User.findOne({username: req.body.username.toLowerCase()}, (err,user) => {
         if(err){
             res.status(500)
@@ -50,14 +48,20 @@ authRouter.post("/login", (req, res, next) =>{
             return next(new Error("Username or password are incorrect"))
 
         }
-        if(req.body.password !== user.password){
-            res.status(403)
-            return next(new Error("Username or password are incorrect"))
-        }
-        console.log(user)
-        const token = jwt.sign(user.toObject(), process.env.SECRET)
-            return res.status(200).send({token, user })
-    })
+    user.checkPassword(req.body.password, (err, isMatch) =>{
+         if(err){
+             res.status(403)
+             return next(new Error("Username or password are incorrect"))
+         }
+         if(!isMatch) {
+             res.status(403)
+             return next(new Error("Username or password are incorrect"))
+         }
+         const token = jwt.sign(savedUser.withoutPassword(),process.env.SECRET)
+             return res.status(200).send({token, user: user.withoutPassword() })
+     })
+ })
+        
 })
 
 
