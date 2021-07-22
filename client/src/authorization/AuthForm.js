@@ -1,5 +1,5 @@
 import React, {useContext} from "react"
-import {AuthContext} from "./AuthContext.js"
+import {AuthContext} from "../context/AuthContext.js"
 
 
 function AuthForm() {
@@ -9,15 +9,15 @@ function AuthForm() {
         SignUp
         <form onSubmit={handleSignUp}>
             <input
-            name="username"
+            name="signupUsername"
             placeholder="Username"
-            value={formState?formState.username:null}
+            value={formState?formState.signupUsername:null}
             onChange={handleChange}
             />
             <input
-            name="password"
+            name="signupPassword"
             placeholder="Password"
-            value={formState?formState.password:null}
+            value={formState?formState.signupPassword:null}
             onChange={handleChange}
             />
             <button>Submit</button>
@@ -27,15 +27,15 @@ function AuthForm() {
         Login
         <form onSubmit={handleLogin}>
             <input
-            name="username"
+            name="loginUsername"
             placeholder="Username"
-            value={formState?formState.username:null}
+            value={formState?formState.loginUsername:null}
             onChange={handleChange}
             />
             <input
-            name="password"
+            name="loginPassword"
             placeholder="Password"
-            value={formState?formState.password:null}
+            value={formState?formState.loginPassword:null}
             onChange={handleChange}
             />
             <button>Submit</button>
