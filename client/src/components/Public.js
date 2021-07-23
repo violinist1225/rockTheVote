@@ -1,22 +1,31 @@
 import React, {useContext, useEffect} from "react"
 import {UserContext} from "../context/UserContext.js"
+import Comments from "./Comment"
+import EditIssueForm from "./EditIssueForm.js"
+import Issue from "./Issue.js"
 export default function Public(){
-    const {issues, getIssues} = useContext(UserContext)
+    const {issues, getIssues, users, getUsers, comments, getComments} = useContext(UserContext)
     const renderedIssues = issues.map(issue => (
-        <div>
-            <h3>{issue.title}</h3>
-            <p>{issue.description}</p>
-            <img src={issue.imageUrl}/>
-        </div>
+        <>
+        <Issue issue={issue} 
+        username={users && users.find(user => user._id === issue.userId) &&  users.find(user => user._id === issue.userId).username}
+        comments={comments && comments.map(comment => issue._id === comment.issueId? comment: null )}
+        /> 
+        </>
+
     ))
+    console.log(comments)
     useEffect(() => {
-        console.log("hello world!")
-        return getIssues
+         getIssues()
+         getUsers()
+         getComments()
+         return
     }, [])
     return (
         <div>
             <h1>Public Posts</h1>
             {renderedIssues}
+           
         </div>
     )
     

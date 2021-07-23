@@ -8,7 +8,7 @@ function AuthContextProvider(props) {
         signupUsername: "",
         signupPassword: "",
         loginUsername: "",
-        loginPassword: "",
+        loginPassword: ""
 
     }
     const initUserState = {
