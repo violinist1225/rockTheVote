@@ -3,7 +3,7 @@ import {UserContext} from "../context/UserContext"
 
 
 
-export default function IssueForm(props) {
+export default function EditIssueForm(props) {
   const {handleChange, editFormState, editIssue} = useContext(UserContext)
 
 

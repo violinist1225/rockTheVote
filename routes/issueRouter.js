@@ -41,8 +41,8 @@ issueRouter.post("/", (req, res, next) => {
 // Delete issue
 issueRouter.delete("/:issueId", (req, res, next) => {
   issue.findOneAndDelete(
-    { _id: req.params.todoId, user: req.user._id },
-    (err, deletedTodo) => {
+    { _id: req.params.issueId, user: req.user._id },
+    (err, deletedIssue) => {
       if(err){
         res.status(500)
         return next(err)
@@ -54,8 +54,9 @@ issueRouter.delete("/:issueId", (req, res, next) => {
 
 // Update issue
 issueRouter.put("/:issueId", (req, res, next) => {
+  console.log(req.body)
   Issue.findOneAndUpdate(
-    { _id: req.params.todoId, user: req.user._id },
+    { _id: req.params.issueId, userId: req.body.userId },
     req.body,
     { new: true },
     (err, updatedIssue) => {
@@ -63,6 +64,7 @@ issueRouter.put("/:issueId", (req, res, next) => {
         res.status(500)
         return next(err)
       }
+      console.log(updatedIssue)
       return res.status(201).send(updatedIssue)
     }
   )

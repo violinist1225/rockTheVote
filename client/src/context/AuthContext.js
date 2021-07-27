@@ -33,7 +33,7 @@ function AuthContextProvider(props) {
          .then(res => {
             setFormState(initState)
             console.log(res.data)
-             const {user, token}= res.data
+             const {user, token} = res.data
              localStorage.setItem("token", token)
              localStorage.setItem("user", JSON.stringify(user))
              return

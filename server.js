@@ -10,7 +10,8 @@ app.use(morgan("dev"))
 app.use(express.json())
 
 mongoose.connect(
-    'mongodb+srv://violinist1225:NovemberL946!@cluster0.8gjpq.mongodb.net/rock-the-vote',
+  process.env.MONGODB_URL,
+    
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -20,8 +21,12 @@ mongoose.connect(
     () => console.log('Connected to the DB')
   )
   app.use('/auth', require('./routes/authRouter.js'))
-  app.use('/api', expressJwt({ secret: process.env.SECRET, algorithms: ['HS256']})) // req.user
-  app.use('/api/issue', require('./routes/issueRouter.js'))
+  app.use('/api', expressJwt({ secret: process.env.SECRET, algorithms: ['HS256']})) 
+  // req.user// Middleware. checking if token is valid in postman (under bearer section in postman)
+  app.use('/api/issues', require('./routes/issueRouter.js'))
+  app.use('/api/users', require('./routes/userRouter.js'))
+  app.use('/api/comments', require('./routes/commentRouter.js'))
+
   app.use((err, req, res, next) => {
     console.log(err)
     if(err.name === "UnauthorizedError"){
@@ -32,3 +37,6 @@ mongoose.connect(
   app.listen(9000, () => {
     console.log(`Server is running on local port 9000`)
   })
+
+
+

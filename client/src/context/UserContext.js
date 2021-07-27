@@ -23,6 +23,7 @@ function UserContextProvider(props) {
     const [issues, setIssues] = useState([])
     const [users, setUsers] = useState([])
     const [editFormState, setEditFormState] = useState(initEditFormState)
+    const [editCommentFormState, setEditCommentFormState] = useState({text: ""})
     const [comments, setComments] = useState([])
 
     const getIssues = () => {
@@ -43,6 +44,12 @@ function UserContextProvider(props) {
    
        }
 
+       const editCommentHandleChange = (e) => {
+        const {value, name} = e.target
+        return setEditCommentFormState(prevState => ({...prevState, [name]: value}))
+ 
+     }
+
     const  editIssue = (e, issueId) =>{  
         e.preventDefault()
         userAxios.put(`/api/issues/${issueId}`, {...editFormState, userId: userState.user._id })
@@ -58,13 +65,27 @@ function UserContextProvider(props) {
         .catch(err => console.log(err))
     }
 
+    const deleteComment = (id) => {
+       userAxios.delete(`/api/comments/${id}`)
+       .then(res => getComments())
+       .catch(err => console.log(err))
+    }
+    
+    const  editComment = (e, commentId) =>{  
+        e.preventDefault()
+        userAxios.put(`/api/comments/${commentId}`, {...editCommentFormState, userId: userState.user._id })
+        .then(res => getComments())
+        .catch(err => console.log(err))
+
+
+}
 
 // const deleteUser = () => {
 
 // }
 
     return (
-        <UserContext.Provider value={{getIssues, issues, getUsers, editIssue, users, handleChange, getComments, comments}}>
+        <UserContext.Provider value={{getIssues, issues, getUsers, editIssue, users, handleChange, getComments, comments, deleteComment, editCommentHandleChange, editComment}}>
             {props.children}
         </UserContext.Provider>
     )

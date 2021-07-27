@@ -22,8 +22,7 @@ const userSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        ref: "User"
     }
 })
     //presave hook to encrypt your passwords on signup 
@@ -36,25 +35,27 @@ const userSchema = new Schema({
             next()
             
     })
+    })
 //method to check encrypted message on login
 
-userSchema.methods.checkPasswords = function(passwordAttempt, callBack){
+userSchema.methods.checkPassword = function(passwordAttempt, callBack){
+    //console.log(passwordAttempt)
     bcrypt.compare(passwordAttempt, this.password, (err, isMatch) => {
-        if(err) return callback(err)
-        return callback(null, isMatch)
+        if(err) return callBack(err)
+        return callBack(null, isMatch)
 
     })
 }
 
 //method to remove user's password for token/sending the response
 userSchema.methods.withoutPassword = function(){
-    const user = this.toObject
+    const user = this.toObject()
     delete user.password
     return user 
 }
 
 
-    })
+    
 
 
 

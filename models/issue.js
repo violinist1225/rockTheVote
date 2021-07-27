@@ -11,8 +11,7 @@ const issueSchema = new Schema({
     description: {
         type: String,
         reqired: true
-    }
-,
+    },
     imageUrl:{
         type: String,
     },
