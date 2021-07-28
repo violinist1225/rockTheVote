@@ -80,12 +80,26 @@ function UserContextProvider(props) {
 
 }
 
+        const likeIssue = (likedIssue) => {
+            userAxios.put(`/api/issues/likes/${likedIssue._id}`, likedIssue)
+            .then(res => getIssues())
+            .catch(err => console.log(err))
+        }
+
+        const dislikeIssue = (dislikedIssue) => {
+            userAxios.put(`/api/issues/dislikes/${dislikedIssue._id}`, dislikedIssue)
+            .then(res => getIssues())
+            .catch(err => console.log(err))
+        }
+
 // const deleteUser = () => {
 
 // }
 
     return (
-        <UserContext.Provider value={{getIssues, issues, getUsers, editIssue, users, handleChange, getComments, comments, deleteComment, editCommentHandleChange, editComment}}>
+        <UserContext.Provider 
+        value={{
+            getIssues, issues, getUsers, editIssue, users, handleChange, getComments, comments, deleteComment, editCommentHandleChange, editComment, likeIssue, dislikeIssue}}>
             {props.children}
         </UserContext.Provider>
     )

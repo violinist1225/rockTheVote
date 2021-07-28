@@ -13,7 +13,7 @@ export default function Profile(){
         issue.userId === user._id?
         <>
         <Issue issue={issue} username={users && users.find(user => user._id === issue.userId) &&  users.find(user => user._id === issue.userId).username}/> 
-        <EditIssueForm issue={issue} />
+        <EditIssueForm issue={issue} />{/*Use conditional rendering to hide this form*/}
         </>
         :null
 

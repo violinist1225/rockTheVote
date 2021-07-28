@@ -17,7 +17,7 @@ export default function Comment({text, _id}){
                 setEditIsClicked(prev => !prev)
                 //toggle setEdit.. above to make form disappear after edits are submitted 
             }}>
-                <input name="text" value={editCommentFormState && editCommentFormState.text} onChange={editCommentHandleChange}/>
+                <input name="text" value={editCommentFormState ?editCommentFormState.text: null} onChange={editCommentHandleChange}/>
                 <button>Submit</button>
                 <button onClick={()=> setEditIsClicked(prev => !prev)}>Cancel</button>
                 
