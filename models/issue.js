@@ -17,8 +17,22 @@ const issueSchema = new Schema({
     },
     userId: {
         type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        ref: "User"
+    },
+    likes: {
+        type: Number,
+        default: 0
+
+    },
+    dislikes: {
+        type: Number,
+        default: 0
+    },
+    likers: {
+        type: Array
+    },
+    dislikers: {
+        type: Array
     }
 })
    

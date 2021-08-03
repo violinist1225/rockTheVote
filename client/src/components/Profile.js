@@ -39,7 +39,7 @@ export default function Profile(){
         <div>
             <h1>Welcome {username}!</h1>
             <ProfileIssueForm />
-            Your Issues
+            <h2 style={{textAlign: "center", color: "purple", }}>{username}'s Issues</h2>
             {myIssues}
            
             

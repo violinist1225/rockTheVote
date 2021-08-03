@@ -16,7 +16,7 @@ commentRouter.get("/", (req, res, next) => {
 
 
 commentRouter.post("/", (req, res, next) => {
-  req.body.user = req.user._id
+  // req.body.userId = req.user._id
   const newComment = new Comment(req.body)
   newComment.save((err, savedComment) => {
     if(err){
@@ -36,7 +36,7 @@ commentRouter.delete("/:commentId", (req, res, next) => {
         res.status(500)
         return next(err)
       }
-      return res.status(200).send(`Successfully deleted comment: ${deletedComment.text}`)
+      return res.status(200).send(`Successfully deleted comment!`)
     }
   )
 })

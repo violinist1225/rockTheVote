@@ -98,7 +98,7 @@ function UserContextProvider(props) {
     const addComment = (e, issueId) => {
         e.preventDefault()
         userAxios.post("/api/comments/", {...commentFormState, issueId: issueId, userId: userState.user._id})
-        .then(res => res.data)
+        .then(res => getComments())
         .catch(err => console.log(err))
     }
 

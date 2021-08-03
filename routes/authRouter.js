@@ -34,38 +34,6 @@ authRouter.post("/signup", (req, res, next) => {
             
     })
 });
-
-
-//login
-
-// authRouter.post("/login", (req, res, next) =>{
-//     //User.find((err, thing) => console.log(thing))
-//     User.findOne({username: req.body.username.toLowerCase()}, (err,user) => {
-//         if(err){
-//             res.status(500)
-//             return next(err)
-//         }
-//         if(!user){
-//             res.status(403)
-//             return next(new Error("Username or password are incorrect"))
-
-//         }
-//         console.log(user)
-//     user.checkPassword(req.body.password, (err, isMatch) =>{
-//          if(err){
-//              res.status(403)
-//              return next(new Error("Username or password are incorrect"))
-//          }
-//          if(!isMatch) {
-//              res.status(403)
-//              return next(new Error("Username or password are incorrect"))
-//          }
-//          const token = jwt.sign(savedUser.toObject(),process.env.SECRET)
-//              return res.status(200).send({token, user: user.toObject() })
-//      })
-//  })
-        
-// })
 authRouter.post("/login", (req, res, next) => {
     //User.find((err, thing) => console.log(thing))
     User.findOne(

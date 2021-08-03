@@ -2,6 +2,7 @@ const express = require("express");
 const issueRouter = express.Router();
 const User = require("../models/user");
 const Issue = require("../models/issue");
+const { update } = require("../models/user");
 
 // Get All Issues
 issueRouter.get("/", (req, res, next) => {
@@ -27,7 +28,7 @@ issueRouter.get("/user", (req, res, next) => {
 
 // Add new issue
 issueRouter.post("/", (req, res, next) => {
-  req.body.user = req.user._id
+  req.body.userId = req.user._id
   const newIssue = new Issue(req.body)
   newIssue.save((err, savedIssue) => {
     if(err){
@@ -40,14 +41,14 @@ issueRouter.post("/", (req, res, next) => {
 
 // Delete issue
 issueRouter.delete("/:issueId", (req, res, next) => {
-  issue.findOneAndDelete(
-    { _id: req.params.issueId, user: req.user._id },
+  Issue.findOneAndDelete(
+    { _id: req.params.issueId, userId: req.user._id },
     (err, deletedIssue) => {
       if(err){
         res.status(500)
         return next(err)
       }
-      return res.status(200).send(`Successfully deleted issue: ${deletedIssue.title}`)
+      return res.status(200).send(`Successfully deleted issue!`)
     }
   )
 })
@@ -69,5 +70,78 @@ issueRouter.put("/:issueId", (req, res, next) => {
     }
   )
 })
+
+//Likes
+issueRouter.put("/likes/:issueId", (req, res, next) => {
+ console.log(req.user._id)
+  Issue.findOneAndUpdate(
+    { _id: req.params.issueId, userId: req.body.userId },
+     //look up $inc mongo method, look up populate
+    { new: false},
+    (err, updatedIssue) => {
+      if(err){
+        res.status(500)
+        return next(err)
+      }
+      
+      !updatedIssue.likers.includes(req.user._id)?
+      Issue.findOneAndUpdate(
+        { _id: req.params.issueId, userId: req.body.userId },
+        {$inc: {likes: 1}, $push: {likers: req.user._id }  }, //look up $inc mongo method, look up populate
+        { new: true },
+        (err, updatedIssue) => {
+          if(err){
+            res.status(500)
+            return next(err)
+          } 
+            return  res.status(201).send(updatedIssue)
+
+        }
+      ): 
+       next(new Error("You already liked this issue sorry!"))
+      
+    }
+  )
+})
+
+
+//Dislike
+issueRouter.put("/dislikes/:issueId", (req, res, next) => {
+ 
+  Issue.findOneAndUpdate(
+    { _id: req.params.issueId, userId: req.body.userId },
+     //look up $inc mongo method
+    { new: false },
+    (err, updatedIssue) => {
+      if(err){
+        res.status(500)
+        return next(err)
+      }
+      console.log(updatedIssue)
+       
+
+      !updatedIssue.dislikers.includes(req.user._id)?
+
+      Issue.findOneAndUpdate(
+        { _id: req.params.issueId, userId: req.body.userId },
+        {$inc: {dislikes: 1}, $push: {dislikers: req.user._id }  }, // $inc mongo method. dislikers array is a property of Issue. $push is pushing req.user_id into dislikers array for this specific issue.
+        { new: true },
+        (err, updatedIssue) => {
+          if(err){
+            res.status(500)
+            return next(err)
+          } 
+            return  res.status(201).send(updatedIssue)
+
+        }
+      )
+      :
+       next(new Error("You already liked this issue sorry!"))
+
+    }
+  )
+})
+
+
 
 module.exports = issueRouter;

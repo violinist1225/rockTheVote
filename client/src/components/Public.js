@@ -25,7 +25,7 @@ export default function Public(){
     }, [])
     return (
         <div>
-            <h1>Public Posts</h1>
+            <h1 style={{textAlign: "center", marginBottom: "25px", color: "palegoldenrod"}} >Public Posts</h1>
             {renderedIssues}
            
         </div>
