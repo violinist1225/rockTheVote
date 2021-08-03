@@ -1,19 +1,21 @@
 import React, {useContext, useState} from "react"
 import {UserContext} from "../context/UserContext.js"
-export default function Comment({text, _id}){
-    const {deleteComment, editCommentFormState, editCommentHandleChange, editComment} = useContext(UserContext)
-    const [editIsClicked, setEditIsClicked] = useState(false)
+export default function Comment({text, _id, issueId, userId}){
+   
+    const {deleteComment, editCommentFormState, editCommentHandleChange, editComment, userState } = useContext(UserContext)
+    const [editIsClicked, setEditIsClicked] = useState(true)
+   
     
 
     console.log(text)
     return (
         <div>
             {text}
-            {editIsClicked? 
+            {!editIsClicked? 
 
 
             <form onSubmit={(e) => {
-                editComment(e, _id)
+                editComment(e, _id, issueId)
                 setEditIsClicked(prev => !prev)
                 //toggle setEdit.. above to make form disappear after edits are submitted 
             }}>
@@ -30,10 +32,10 @@ export default function Comment({text, _id}){
 
 
 
-            <button onClick={()=> deleteComment(_id)}>Delete Comment</button>
+            {userState.user._id === userId?<button onClick={()=> deleteComment(_id)}>Delete Comment</button>:null}
 
 
-            {!editIsClicked? 
+            {userState.user._id === userId && editIsClicked? 
 
             <button onClick={()=> setEditIsClicked(prev => !prev)}>Edit Comment</button>
             

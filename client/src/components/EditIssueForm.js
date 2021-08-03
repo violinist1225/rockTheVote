@@ -4,16 +4,25 @@ import {UserContext} from "../context/UserContext"
 
 
 export default function EditIssueForm(props) {
-  const {handleChange, editFormState, editIssue} = useContext(UserContext)
+  const {editIssueHandleChange, editFormState, editIssue} = useContext(UserContext)
 
 
     return (
-        <form onSubmit={(e) => editIssue(e, props.issue._id)}>
-            <input name="title" value={editFormState && editFormState.title} onChange={handleChange}/>
-            <input name="description" value={editFormState && editFormState.description} onChange={handleChange} />
-            <input name="imageUrl" value={editFormState && editFormState.imageUrl} onChange={handleChange}/>
+        <>
+        <form 
+        onSubmit=
+        {(e) => {
+            editIssue(e, props.issue._id)
+            props.setHideEditForm(prevState => !prevState)
+            }}>
+                
+            <input name="title" value={editFormState && editFormState.title} onChange={editIssueHandleChange}/>
+            <input name="description" value={editFormState && editFormState.description} onChange={editIssueHandleChange} />
+            <input name="imageUrl" value={editFormState && editFormState.imageUrl} onChange={editIssueHandleChange}/>
             <button>Submit</button>
         </form>
+        <button onClick={() => props.setHideEditForm(prevState => !prevState) }>Cancel</button>
+        </>
     )
 } 
  

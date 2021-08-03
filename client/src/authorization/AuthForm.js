@@ -11,13 +11,14 @@ function AuthForm() {
             <input
             name="signupUsername"
             placeholder="Username"
-            value={formState?formState.signupUsername:null}
+            value={formState?.signupUsername}
+            //ES6 ternary update does not require full formState?.signupUsername:null
             onChange={handleChange}
             />
             <input
             name="signupPassword"
             placeholder="Password"
-            value={formState?formState.signupPassword:null}
+            value={formState?.signupPassword}
             onChange={handleChange}
             />
             <button>Submit</button>
@@ -29,13 +30,13 @@ function AuthForm() {
             <input
             name="loginUsername"
             placeholder="Username"
-            value={formState?formState.loginUsername:null}
+            value={formState?.loginUsername}
             onChange={handleChange}
             />
             <input
             name="loginPassword"
             placeholder="Password"
-            value={formState?formState.loginPassword:null}
+            value={formState?.loginPassword}
             onChange={handleChange}
             />
             <button>Submit</button>

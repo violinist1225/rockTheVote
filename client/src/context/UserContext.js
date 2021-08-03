@@ -10,6 +10,11 @@ userAxios.interceptors.request.use(config => {
 })
 
 function UserContextProvider(props) {
+    const initIssueFormState = {
+        title: "",
+        description: "",
+        imageUrl: ""
+    }
     const initEditFormState = {
         title: "",
         description: "",
@@ -22,7 +27,9 @@ function UserContextProvider(props) {
     const [userState, setUserState ] = useState(initUserState)
     const [issues, setIssues] = useState([])
     const [users, setUsers] = useState([])
+    const [issueFormState, setIssueFormState] = useState(initIssueFormState)
     const [editFormState, setEditFormState] = useState(initEditFormState)
+    const [commentFormState, setCommentFormState] = useState({text: ""})
     const [editCommentFormState, setEditCommentFormState] = useState({text: ""})
     const [comments, setComments] = useState([])
 
@@ -38,7 +45,7 @@ function UserContextProvider(props) {
         .catch(err => console.log(err))
     }
       
-      const handleChange = (e) => {
+      const editIssueHandleChange = (e) => {
           const {value, name} = e.target
           return setEditFormState(prevState => ({...prevState, [name]: value}))
    
@@ -50,6 +57,22 @@ function UserContextProvider(props) {
  
      }
 
+     const issueFormHandleChange = (e) => {
+        const {value, name} = e.target
+        return setIssueFormState(prevState => ({...prevState, [name]: value}))
+     }
+
+     const commentFormHandleChange = (e) => {
+        const {value, name} = e.target
+        return setCommentFormState(prevState => ({...prevState, [name]: value}))
+     }
+
+     const deleteIssue = (id) => {
+        userAxios.delete(`/api/issues/${id}`)
+        .then(res => getIssues())
+        .catch(err => console.log(err))
+     }
+
     const  editIssue = (e, issueId) =>{  
         e.preventDefault()
         userAxios.put(`/api/issues/${issueId}`, {...editFormState, userId: userState.user._id })
@@ -58,10 +81,24 @@ function UserContextProvider(props) {
 
 
 }
+   const addIssue = (e, newIssue)=> {
+        e.preventDefault()
+        console.log("post ran")
+        userAxios.post(`/api/issues/`, newIssue)
+        .then(res => getIssues())
+        .catch(err => console.log(err))
+    }
 
     const getComments = ()=> {
         userAxios.get("/api/comments/")
         .then(res => setComments(res.data))
+        .catch(err => console.log(err))
+    }
+
+    const addComment = (e, issueId) => {
+        e.preventDefault()
+        userAxios.post("/api/comments/", {...commentFormState, issueId: issueId, userId: userState.user._id})
+        .then(res => res.data)
         .catch(err => console.log(err))
     }
 
@@ -71,9 +108,9 @@ function UserContextProvider(props) {
        .catch(err => console.log(err))
     }
     
-    const  editComment = (e, commentId) =>{  
+    const  editComment = (e, commentId, issueId) =>{  
         e.preventDefault()
-        userAxios.put(`/api/comments/${commentId}`, {...editCommentFormState, userId: userState.user._id })
+        userAxios.put(`/api/comments/${commentId}`, {...editCommentFormState, issueId: issueId, userId: userState.user._id })
         .then(res => getComments())
         .catch(err => console.log(err))
 
@@ -99,7 +136,7 @@ function UserContextProvider(props) {
     return (
         <UserContext.Provider 
         value={{
-            getIssues, issues, getUsers, editIssue, users, handleChange, getComments, comments, deleteComment, editCommentHandleChange, editComment, likeIssue, dislikeIssue}}>
+            getIssues, issues, getUsers, editIssue, users, editIssueHandleChange, getComments, comments, deleteComment, editCommentHandleChange, editComment, likeIssue, dislikeIssue, issueFormHandleChange, issueFormState, addIssue, deleteIssue, addComment, commentFormHandleChange, userState}}>
             {props.children}
         </UserContext.Provider>
     )

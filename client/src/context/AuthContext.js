@@ -64,9 +64,20 @@ const handleLogin = (e) => {
 
 }
 
+const handleLogout = (e) => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    setUserState({
+        user: {},
+        token: "",
+        issues:[]
+
+    })
+}
+
 
     return (
-       <AuthContext.Provider value={{formState, handleChange, handleSignUp, handleLogin, ...userState}}>
+       <AuthContext.Provider value={{formState, handleChange, handleSignUp, handleLogout, handleLogin, ...userState}}>
            {props.children}
 
         </AuthContext.Provider>

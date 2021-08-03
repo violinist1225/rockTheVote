@@ -2,43 +2,46 @@ import React, {useContext} from "react"
 import AuthPage from "./authorization/AuthPage.js"
 import {Route, Switch, Redirect } from "react-router-dom"
 import {AuthContext} from "./context/AuthContext.js"
-//  import Navbar from './components/Navbar.js'
+ import NavBar from './components/NavBar.js'
 // import Auth from './components/Auth.js'
 import Profile from './components/Profile.js'
 import Public from './components/Public.js'
 
+
 function App() {
-  const {token} = useContext(AuthContext)
+  const {token, handleLogout} = useContext(AuthContext)
   return (
     <div className="app">
+      <NavBar handleLogout={handleLogout}/>
       {/* {token && <Navbar logout={logout} />} */}
       <Switch>
-        {/* <Route 
+         <Route 
           exact path="/" 
-          render={()=> token ? <Redirect to= "/profile"/> : <Auth />} 
+          render={()=> token ? <Redirect to= "/profile"/> : <AuthPage />} 
           />
         
         <Route 
           path="/profile"
-          render={() => <Profile />}
+          render={() => token? <Profile />:<Redirect to="/" />}
         />
         <Route 
           path="/public"
           render={() => <Public />}
-        /> */}
-        /* <Route 
+        /> 
+         {/* <Route 
           exact path="/" 
-          render={()=> !token ? <AuthPage /> : <Profile />}  //use Redirect in this ternary!
-          />
+          render={()=> !token ? <Redirect to= "<AuthPage" /> : <Profile />}  
+          /> */}
           <Route
           exact path="/public"
-          render={() => !token ? <AuthPage />: <Public />}  //use Redirect in this ternary!
+          render={() => !token ? <Redirect to= "AuthPage" />: <Public />}  
           />
       </Switch>
     </div>
     
   );
 }
-
 export default App;
+
+
 
