@@ -6,7 +6,7 @@ import EditIssueForm from "./EditIssueForm.js"
 import Issue from "./Issue.js"
 
 export default function Profile(){
-    const {user} = useContext(AuthContext)
+    const {user, setUserState} = useContext(AuthContext)
     const {issues, getIssues, users, getUsers, deleteIssue} = useContext(UserContext)
     const {username} = user
     const [hideEditForm, setHideEditForm ] = useState(true)
@@ -16,7 +16,7 @@ export default function Profile(){
 
 
         <>
-            <Issue issue={issue} username={users && users.find(user => user._id === issue.userId) &&  users.find(user => user._id === issue.userId).username} setHideEditForm={setHideEditForm}/> 
+            <Issue issue={issue} username={users && users.find(user => user._id === issue.userId) &&  users.find(user => user._id === issue.userId).username} setHideEditForm={setHideEditForm} removeCreatedUser={true}/> 
 
             {
             hideEditForm?
@@ -33,7 +33,14 @@ export default function Profile(){
 
     ))
 
-    useEffect(() => getIssues(), [])
+    useEffect(() => {
+        setUserState({
+            token: localStorage.getItem("token") || "",
+            user: JSON.parse(localStorage.getItem("user")) || "",
+            errMsg: ""
+        })
+        getIssues()}, 
+        [])
 
     return (
         <div>

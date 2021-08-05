@@ -1,12 +1,12 @@
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import {UserContext} from "../context/UserContext"
 
 
 
 export default function EditIssueForm(props) {
-  const {editIssueHandleChange, editFormState, editIssue} = useContext(UserContext)
+  const {editIssueHandleChange, editFormState, editIssue, setEditFormState} = useContext(UserContext)
 
-
+    useEffect(() => setEditFormState({title: props.isssue.title, description: props.isssue.description, imageUrl: props.issue.imageUrl}), [])
     return (
         <>
         <form 

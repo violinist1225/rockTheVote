@@ -1,13 +1,13 @@
-import React, {useContext, useState} from "react"
+import React, {useContext, useEffect, useState} from "react"
 import {UserContext} from "../context/UserContext.js"
 export default function Comment({text, _id, issueId, userId}){
    
-    const {deleteComment, editCommentFormState, editCommentHandleChange, editComment, userState } = useContext(UserContext)
+    const {deleteComment, editCommentFormState, setEditCommentFormState, editCommentHandleChange, editComment, userState } = useContext(UserContext)
     const [editIsClicked, setEditIsClicked] = useState(true)
-   
-    
 
-    console.log(text)
+    
+    
+    useEffect( () => setEditCommentFormState({text: text}),[])
     return (
         <div>
             {text}

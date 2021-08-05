@@ -84,7 +84,7 @@ issueRouter.put("/likes/:issueId", (req, res, next) => {
         return next(err)
       }
       
-      !updatedIssue.likers.includes(req.user._id)?
+      !updatedIssue.likers.includes(req.user._id) && !updatedIssue.dislikers.includes(req.user._id)?
       Issue.findOneAndUpdate(
         { _id: req.params.issueId, userId: req.body.userId },
         {$inc: {likes: 1}, $push: {likers: req.user._id }  }, //look up $inc mongo method, look up populate
@@ -98,7 +98,7 @@ issueRouter.put("/likes/:issueId", (req, res, next) => {
 
         }
       ): 
-       next(new Error("You already liked this issue sorry!"))
+       next(new Error("You already liked or disliked this issue sorry!"))
       
     }
   )
@@ -120,7 +120,7 @@ issueRouter.put("/dislikes/:issueId", (req, res, next) => {
       console.log(updatedIssue)
        
 
-      !updatedIssue.dislikers.includes(req.user._id)?
+      !updatedIssue.likers.includes(req.user._id) && !updatedIssue.dislikers.includes(req.user._id)?
 
       Issue.findOneAndUpdate(
         { _id: req.params.issueId, userId: req.body.userId },
@@ -136,7 +136,7 @@ issueRouter.put("/dislikes/:issueId", (req, res, next) => {
         }
       )
       :
-       next(new Error("You already liked this issue sorry!"))
+       next(new Error("You already liked or disliked this issue sorry!"))
 
     }
   )

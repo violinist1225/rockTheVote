@@ -1,9 +1,10 @@
-import React, {useContext} from "react"
+import React, {useContext, useEffect} from "react"
 import {AuthContext} from "../context/AuthContext.js"
 
 
 function AuthForm() {
-    const {formState, handleChange, handleSignUp, handleLogin} = useContext(AuthContext)
+    const {formState, handleChange, handleSignUp, handleLogin, errMsg} = useContext(AuthContext)
+    useEffect(() => console.log(errMsg && errMsg), [errMsg])
     return (
         <>
         SignUp
@@ -43,6 +44,7 @@ function AuthForm() {
 
             
         </form>
+        {errMsg && errMsg && <p style={{color: "red"}}>{errMsg}</p>}
         </>
     )}
 

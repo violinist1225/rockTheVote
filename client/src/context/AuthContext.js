@@ -13,7 +13,8 @@ function AuthContextProvider(props) {
     }
     const initUserState = {
         token: localStorage.getItem("token") || "",
-        user: JSON.parse(localStorage.getItem("user")) || ""
+        user: JSON.parse(localStorage.getItem("user")) || "",
+        errMsg: ""
     }
     const [formState, setFormState] = useState(initState)
     const [userState, setUserState ] = useState(initUserState)
@@ -33,12 +34,19 @@ function AuthContextProvider(props) {
          .then(res => {
             setFormState(initState)
             console.log(res.data)
+            setUserState(prevState => {
+                return {
+                    ...prevState,
+                    token: res.data.token
+                }
+            })
              const {user, token} = res.data
              localStorage.setItem("token", token)
              localStorage.setItem("user", JSON.stringify(user))
              return
             })
-         .catch(err => console.log(err))
+         .catch(err => handleAuthErr(err.response.data.errMsg))
+
     
 }
 
@@ -55,14 +63,22 @@ const handleLogin = (e) => {
            }
        })
        console.log(res.data)
-       const {user, token}= res.data
+       const {user, token} = res.data
        localStorage.setItem("token", token)
        localStorage.setItem("user", JSON.stringify(user))
         return
        })
-    .catch(err => console.log(err))
+    .catch(err => handleAuthErr(err.response.data.errMsg))
+
 
 }
+
+const handleAuthErr = (errMsg) => {
+    setUserState(prevState => ({
+      ...prevState,
+      errMsg: errMsg
+    }))
+  }
 
 const handleLogout = (e) => {
     localStorage.removeItem("token")
@@ -77,7 +93,7 @@ const handleLogout = (e) => {
 
 
     return (
-       <AuthContext.Provider value={{formState, handleChange, handleSignUp, handleLogout, handleLogin, ...userState}}>
+       <AuthContext.Provider value={{formState, handleChange, handleSignUp, handleLogout, handleLogin, ...userState, setUserState}}>
            {props.children}
 
         </AuthContext.Provider>

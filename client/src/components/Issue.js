@@ -1,9 +1,11 @@
 import React, {useContext, useEffect, useState} from "react"
 import { UserContext } from "../context/UserContext"
+import CommentForm from "./CommentForm"
 import Comment from "./Comment"
 import "../styles/issue.css"
-export default function Issue({issue, username, comments, setHideEditForm}){
+export default function Issue({issue, username, comments, setHideEditForm, removeCreatedUser}){
     const [commentToggle, setCommentToggle] = useState(false)
+    const [hideCommentForm, setHideCommentForm ] = useState(true)
     const {likeIssue, dislikeIssue, deleteIssue, user} = useContext(UserContext)
 
     const renderedComments = comments && comments.map(comment => <Comment issueId={issue._id} {...comment} />)
@@ -33,7 +35,7 @@ export default function Issue({issue, username, comments, setHideEditForm}){
               </div>
             </div>
             <h1 className="username">{issue.title}</h1>
-            <h2 className="profession"> Created by @{username}</h2>
+            {removeCreatedUser ? null: <h2 className="profession"> Created by @{username}</h2>}
         
             <p className="descricao">{issue.description}</p>
             <div className="socialmedia">
@@ -63,6 +65,7 @@ export default function Issue({issue, username, comments, setHideEditForm}){
             <button onClick={()=> setHideEditForm(prevState => !prevState)} >Edit</button>
             </>
             }
+              {hideCommentForm?<button onClick={() => setHideCommentForm(prevState => !prevState)}>Comment</button>:<CommentForm issueId={issue._id} setHideCommentForm={setHideCommentForm} />}
         </div>
          </>  
        
