@@ -136,7 +136,7 @@ function UserContextProvider(props) {
     return (
         <UserContext.Provider 
         value={{
-            getIssues, issues, getUsers, editIssue, users, editIssueHandleChange, getComments, comments, deleteComment, editCommentHandleChange, editComment, likeIssue, dislikeIssue, issueFormHandleChange, issueFormState, addIssue, deleteIssue, addComment, commentFormHandleChange, userState, setEditFormState, editCommentFormState, setEditCommentFormState}}>
+            getIssues, issues, getUsers, editIssue, users, editIssueHandleChange, getComments, comments, deleteComment, editCommentHandleChange, editComment, likeIssue, dislikeIssue, issueFormHandleChange, issueFormState, addIssue, deleteIssue, addComment, commentFormHandleChange, userState, setEditFormState, editFormState, editCommentFormState, setEditCommentFormState}}>
             {props.children}
         </UserContext.Provider>
     )
