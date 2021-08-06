@@ -2,10 +2,13 @@ import React, {useContext, useEffect, useState} from "react"
 import { UserContext } from "../context/UserContext"
 import CommentForm from "./CommentForm"
 import Comment from "./Comment"
+import EditIssueForm from "./EditIssueForm.js"
+
 import "../styles/issue.css"
-export default function Issue({issue, username, comments, setHideEditForm, removeCreatedUser}){
+export default function Issue({issue, username, comments, onProfilePage}){
     const [commentToggle, setCommentToggle] = useState(false)
     const [hideCommentForm, setHideCommentForm ] = useState(true)
+    const [hideEditForm, setHideEditForm ] = useState(true)
     const {likeIssue, dislikeIssue, deleteIssue, user} = useContext(UserContext)
 
     const renderedComments = comments && comments.map(comment => <Comment issueId={issue._id} {...comment} />)
@@ -35,7 +38,7 @@ export default function Issue({issue, username, comments, setHideEditForm, remov
               </div>
             </div>
             <h1 className="username">{issue.title}</h1>
-            {removeCreatedUser ? null: <h2 className="profession"> Created by @{username}</h2>}
+            {onProfilePage ? null: <h2 className="profession"> Created by @{username}</h2>}
         
             <p className="descricao">{issue.description}</p>
             <div className="socialmedia">
@@ -54,10 +57,10 @@ export default function Issue({issue, username, comments, setHideEditForm, remov
         </div></div> 
         <div>
             
-            <button style={{display: "block"}} onClick={()=> setCommentToggle(prev => !prev)}>{commentToggle?"Hide":"Show"} Comment</button>
+           {onProfilePage? null : <button style={{display: "block"}} onClick={()=> setCommentToggle(prev => !prev)}>{commentToggle?"Hide":"Show"} Comment</button>}
             {user}
             {commentToggle?renderedComments:null}
-            {setHideEditForm === undefined?
+            {setHideEditForm?
             null
             :
             <>
@@ -65,7 +68,15 @@ export default function Issue({issue, username, comments, setHideEditForm, remov
             <button onClick={()=> setHideEditForm(prevState => !prevState)} >Edit</button>
             </>
             }
-              {hideCommentForm?<button onClick={() => setHideCommentForm(prevState => !prevState)}>Comment</button>:<CommentForm issueId={issue._id} setHideCommentForm={setHideCommentForm} />}
+              {onProfilePage?null:hideCommentForm?<button onClick={() => setHideCommentForm(prevState => !prevState)}>Comment</button>:<CommentForm issueId={issue._id} setHideCommentForm={setHideCommentForm} />}
+              
+            {
+            hideEditForm?
+            null:
+            <>
+            <EditIssueForm issue={issue} setHideEditForm={setHideEditForm} />{/*Use conditional rendering to hide this form*/}
+            </>
+            }
         </div>
          </>  
        

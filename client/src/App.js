@@ -26,16 +26,16 @@ function App() {
         />
         <Route 
           path="/public"
-          render={() => <Public />}
+          render={() =>token? <Public />: <Redirect to="/" />}
         /> 
          {/* <Route 
           exact path="/" 
           render={()=> !token ? <Redirect to= "<AuthPage" /> : <Profile />}  
           /> */}
-          <Route
+          {/* <Route
           exact path="/public"
           render={() => !token ? <Redirect to= "AuthPage" />: <Public />}  
-          />
+          /> */}
       </Switch>
     </div>
     

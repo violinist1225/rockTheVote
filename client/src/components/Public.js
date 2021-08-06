@@ -1,9 +1,11 @@
 import React, {useContext, useEffect, useState} from "react"
+import { AuthContext } from "../context/AuthContext.js"
 import {UserContext} from "../context/UserContext.js"
 import EditIssueForm from "./EditIssueForm.js"
 import Issue from "./Issue.js"
 export default function Public(){
     const {issues, getIssues, users, getUsers, comments, getComments} = useContext(UserContext)
+    const {setUserState} = useContext(AuthContext)
    
     const renderedIssues = issues.map(issue => (
         <>
@@ -19,8 +21,14 @@ export default function Public(){
          getIssues()
          getUsers()
          getComments()
+         setUserState({
+            token: localStorage.getItem("token") || "",
+            user: JSON.parse(localStorage.getItem("user")) || "",
+            errMsg: ""
+        })
          return
     }, [])
+
     return (
         <div>
             <h1 style={{textAlign: "center", marginBottom: "25px", color: "palegoldenrod"}} >Public Posts</h1>
